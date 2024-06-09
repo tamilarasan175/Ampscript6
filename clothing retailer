@@ -1,0 +1,48 @@
+A clothing retailer wants to send a promotional email to their customers featuring a special discount. The discount varies based on the customer's purchase history. Customers who have spent more than $100 in the past year receive a 20% discount, while those who have spent less than $100 receive a 10% discount. 
+
+The email should dynamically display the appropriate discount code and a personalized message based on the customer's spending.
+Segment
+Content
+Total Spend > 100
+Message: As a valued customer, you get 20% off your next purchase!
+
+Discount Code: <first name>20OFF
+Total Spend <= 100
+Message: Thank you for being our customer, enjoy 10% off your next purchase!
+
+Discount Code: <first name>10OFF
+
+%%[
+SET @fName = [FirstName]
+SET @lastPur = [LastPurchase]
+SET @Totalsp = [TotalSpend]
+
+/* name formatting*/
+IF NOT EMPTY(@fName) THEN
+SET @fNametrim = TRIM(@fName)
+SET @finalName = Propercase(@fNametrim)
+SET @finalUpper = Uppercase(@fNametrim)
+ELSE
+SET @finalName = "there"
+SET @finalUpper = "DISCOUNT"
+ENDIF
+/* conditional*/
+IF @Totalsp > 100  THEN
+SET @Message = "As a valued customer, you get 20% off your next purchase!"
+SET @DiscFname = CONCAT(@finalUpper, "20 OFF")
+ELSE
+SET @Message = "Thank you for being our customer, enjoy 10% off your next purchase!"
+SET @DiscFname = CONCAT(@finalUpper, "10 OFF")
+ENDIF
+
+]%%
+
+Hi %%=v(@finalName)=%%,
+
+%%=v(@Message)=%%
+
+Use code: %%=v(@DiscFname)=%%  at checkout.
+
+Warm regards,
+The Everyday Essentials Team
+
